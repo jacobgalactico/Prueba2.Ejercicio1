@@ -13,6 +13,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.prueba2ejercicio1.ui.theme.Prueba2Ejercicio1Theme
 
 class MainActivity : ComponentActivity() {
@@ -20,15 +24,28 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Prueba2Ejercicio1Theme {
-                // Llamada al Composable principal
-                MainScreen()
+                val navController = rememberNavController()
+                AppNavHost(navController)
             }
         }
     }
 }
 
 @Composable
-fun MainScreen() {
+fun AppNavHost(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = "main_screen"
+    ) {
+        composable("main_screen") { MainScreen(navController) }
+        composable("add_class") { AddClassScreen() }
+        composable("view_schedule") { ViewScheduleScreen() }
+        composable("current_task") { CurrentTaskScreen() }
+    }
+}
+
+@Composable
+fun MainScreen(navController: NavHostController) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -40,7 +57,6 @@ fun MainScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Título
             Text(
                 text = "Mi horario",
                 fontSize = 32.sp,
@@ -49,9 +65,8 @@ fun MainScreen() {
                 modifier = Modifier.padding(bottom = 32.dp)
             )
 
-            // Botón "Añadir clase"
             Button(
-                onClick = { /* Acción para añadir clase */ },
+                onClick = { navController.navigate("add_class") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
@@ -60,9 +75,8 @@ fun MainScreen() {
                 Text(text = "Añadir clase")
             }
 
-            // Botón "Ver Horario"
             Button(
-                onClick = { /* Acción para ver horario */ },
+                onClick = { navController.navigate("view_schedule") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
@@ -71,9 +85,8 @@ fun MainScreen() {
                 Text(text = "Ver Horario")
             }
 
-            // Botón "¿Qué toca ahora?"
             Button(
-                onClick = { /* Acción para mostrar qué toca ahora */ },
+                onClick = { navController.navigate("current_task") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
@@ -82,5 +95,59 @@ fun MainScreen() {
                 Text(text = "¿Qué toca ahora?")
             }
         }
+    }
+}
+
+@Composable
+fun AddClassScreen() {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Text(
+            text = "Añadir Clase",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center)
+        )
+    }
+}
+
+@Composable
+fun ViewScheduleScreen() {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Text(
+            text = "Ver Horario",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center)
+        )
+    }
+}
+
+@Composable
+fun CurrentTaskScreen() {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Text(
+            text = "¿Qué toca ahora?",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center)
+        )
     }
 }
