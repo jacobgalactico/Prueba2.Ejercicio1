@@ -38,7 +38,7 @@ fun AppNavHost(navController: NavHostController) {
         startDestination = "main_screen"
     ) {
         composable("main_screen") { MainScreen(navController) }
-        composable("add_class") { AddClassScreen() }
+        composable("add_class") { AddClassScreenFull() }
         composable("view_schedule") { ViewScheduleScreen() }
         composable("current_task") { CurrentTaskScreen() }
     }
