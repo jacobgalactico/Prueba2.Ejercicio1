@@ -3,6 +3,7 @@ package com.example.prueba2ejercicio1
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -25,21 +26,22 @@ class MainActivity : ComponentActivity() {
         setContent {
             Prueba2Ejercicio1Theme {
                 val navController = rememberNavController()
-                AppNavHost(navController)
+                val scheduleViewModel: ScheduleViewModel = viewModel() // Crear el ViewModel
+                AppNavHost(navController, scheduleViewModel) // Pasar el ViewModel
             }
         }
     }
 }
 
 @Composable
-fun AppNavHost(navController: NavHostController) {
+fun AppNavHost(navController: NavHostController, scheduleViewModel: ScheduleViewModel) {
     NavHost(
         navController = navController,
         startDestination = "main_screen"
     ) {
         composable("main_screen") { MainScreen(navController) }
-        composable("add_class") { AddClassScreenFull() }
-        composable("view_schedule") { ViewScheduleScreen() }
+        composable("add_class") { AddClassScreenFull(scheduleViewModel) } // Pasar el ViewModel
+        composable("view_schedule") { ViewScheduleScreen(scheduleViewModel) } // Pasar el ViewModel
         composable("current_task") { CurrentTaskScreen() }
     }
 }
@@ -95,42 +97,6 @@ fun MainScreen(navController: NavHostController) {
                 Text(text = "¿Qué toca ahora?")
             }
         }
-    }
-}
-
-@Composable
-fun AddClassScreen() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Text(
-            text = "Añadir Clase",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentSize(Alignment.Center)
-        )
-    }
-}
-
-@Composable
-fun ViewScheduleScreen() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Text(
-            text = "Ver Horario",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentSize(Alignment.Center)
-        )
     }
 }
 
