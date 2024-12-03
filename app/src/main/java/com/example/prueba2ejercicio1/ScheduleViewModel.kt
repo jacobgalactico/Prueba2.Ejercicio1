@@ -16,5 +16,6 @@ class ScheduleViewModel : ViewModel() {
 
     fun getClassesForDay(day: String): List<ClassItem> {
         return _classes.value.filter { it.day == day }
+            .sortedBy { it.time } // Ordenar por hora
     }
 }
