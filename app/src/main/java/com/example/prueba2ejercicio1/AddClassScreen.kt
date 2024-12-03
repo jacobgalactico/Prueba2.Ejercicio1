@@ -11,11 +11,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddClassScreenFull() { // Renombrada para evitar conflicto
+fun AddClassScreenFull() {
     var className by remember { mutableStateOf("") }
-    var dayOfWeek by remember { mutableStateOf("") }
-    var time by remember { mutableStateOf("") }
+    var selectedDay by remember { mutableStateOf("") }
+    var expandedDay by remember { mutableStateOf(false) }
+    val daysOfWeek = listOf("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo")
+
+    var selectedTime by remember { mutableStateOf("") }
+    var expandedTime by remember { mutableStateOf(false) }
+    val times = listOf("08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00")
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -45,27 +51,77 @@ fun AddClassScreenFull() { // Renombrada para evitar conflicto
                     .padding(vertical = 8.dp)
             )
 
-            OutlinedTextField(
-                value = dayOfWeek,
-                onValueChange = { dayOfWeek = it },
-                label = { Text("Día de la Semana") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            )
+            // Dropdown para Día de la Semana
+            ExposedDropdownMenuBox(
+                expanded = expandedDay,
+                onExpandedChange = { expandedDay = !expandedDay }
+            ) {
+                OutlinedTextField(
+                    value = selectedDay,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Día de la Semana") },
+                    modifier = Modifier
+                        .menuAnchor() // Ancla para el menú desplegable
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedDay)
+                    }
+                )
+                ExposedDropdownMenu(
+                    expanded = expandedDay,
+                    onDismissRequest = { expandedDay = false }
+                ) {
+                    daysOfWeek.forEach { day ->
+                        DropdownMenuItem(
+                            text = { Text(text = day) },
+                            onClick = {
+                                selectedDay = day
+                                expandedDay = false
+                            }
+                        )
+                    }
+                }
+            }
 
-            OutlinedTextField(
-                value = time,
-                onValueChange = { time = it },
-                label = { Text("Hora") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-            )
+            // Dropdown para Hora
+            ExposedDropdownMenuBox(
+                expanded = expandedTime,
+                onExpandedChange = { expandedTime = !expandedTime }
+            ) {
+                OutlinedTextField(
+                    value = selectedTime,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Hora") },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedTime)
+                    }
+                )
+                ExposedDropdownMenu(
+                    expanded = expandedTime,
+                    onDismissRequest = { expandedTime = false }
+                ) {
+                    times.forEach { time ->
+                        DropdownMenuItem(
+                            text = { Text(text = time) },
+                            onClick = {
+                                selectedTime = time
+                                expandedTime = false
+                            }
+                        )
+                    }
+                }
+            }
 
             Button(
                 onClick = {
-                    // Aquí puedes manejar el guardado de la información
+                    // Manejar el guardado de la información aquí
                 },
                 modifier = Modifier
                     .fillMaxWidth()
