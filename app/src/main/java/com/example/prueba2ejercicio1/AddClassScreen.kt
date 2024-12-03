@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddClassScreenFull() {
+fun AddClassScreenFull(scheduleViewModel: ScheduleViewModel) {
     var className by remember { mutableStateOf("") }
     var selectedDay by remember { mutableStateOf("") }
     var expandedDay by remember { mutableStateOf(false) }
@@ -51,7 +51,6 @@ fun AddClassScreenFull() {
                     .padding(vertical = 8.dp)
             )
 
-            // Dropdown para Día de la Semana
             ExposedDropdownMenuBox(
                 expanded = expandedDay,
                 onExpandedChange = { expandedDay = !expandedDay }
@@ -62,7 +61,7 @@ fun AddClassScreenFull() {
                     readOnly = true,
                     label = { Text("Día de la Semana") },
                     modifier = Modifier
-                        .menuAnchor() // Ancla para el menú desplegable
+                        .menuAnchor()
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
                     trailingIcon = {
@@ -85,7 +84,6 @@ fun AddClassScreenFull() {
                 }
             }
 
-            // Dropdown para Hora
             ExposedDropdownMenuBox(
                 expanded = expandedTime,
                 onExpandedChange = { expandedTime = !expandedTime }
@@ -121,7 +119,12 @@ fun AddClassScreenFull() {
 
             Button(
                 onClick = {
-                    // Manejar el guardado de la información aquí
+                    if (className.isNotBlank() && selectedDay.isNotBlank() && selectedTime.isNotBlank()) {
+                        scheduleViewModel.addClass(ClassItem(className, selectedDay, selectedTime))
+                        className = ""
+                        selectedDay = ""
+                        selectedTime = ""
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
